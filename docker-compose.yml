@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server1
+    hostname: server1
+    ports:
+      - "5001:5001"
+    volumes:
+      - /tmp/storage/server1:/tmp/storage
+    command: >
+      java -jar app.jar
+      --id server1 --storage /tmp/storage/server1
+      --raftGroup demoRaftGroup123
+      --peers server1:server1:5001,server2:server2:5002,server3:server3:5003
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server2
+    hostname: server2
+    ports:
+      - "5002:5002"
+    volumes:
+      - /tmp/storage/server2:/tmp/storage
+    command: >
+      java -jar app.jar
+      --id server2 --storage /tmp/storage/server2
+      --raftGroup demoRaftGroup123
+      --peers server1:server1:5001,server2:server2:5002,server3:server3:5003
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server3
+    hostname: server3
+    ports:
+      - "5003:5003"
+    volumes:
+      - /tmp/storage/server3:/tmp/storage
+    command: >
+      java -jar app.jar
+      --id server3 --storage /tmp/storage/server3
+      --raftGroup demoRaftGroup123
+      --peers server1:server1:5001,server2:server2:5002,server3:server3:5003
